@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%@ page import="java.sql.*,com.tech.blog.helper.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +19,14 @@
 </head>
 <body>
 	<h1>Hello world</h1>
+	
+	<%
+	
+		Connection con=ConnectionProvider.getConnection();
+		
+	%>
+	<%=con %>
+	
 
 	<!-- Jquery -->
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
