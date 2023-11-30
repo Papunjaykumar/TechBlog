@@ -71,6 +71,7 @@ public class RegisterServlet extends HttpServlet {
 				out.println("done");
 			}else {
 				System.out.println("Something went wrong...");
+				out.println("Something went wrong...");
 			}
 			
 		}
