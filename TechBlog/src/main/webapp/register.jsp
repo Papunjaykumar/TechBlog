@@ -27,8 +27,9 @@
 </head>
 <body>
 
-	<%@include file="normal_navbar.jsp" %>
-	<main class="primary-background pb-5 banner-background" style="padding-bottom:50px;">
+	<%@include file="normal_navbar.jsp"%>
+	<main class="primary-background pb-5 banner-background"
+		style="padding-bottom: 50px;">
 		<div class="container mt-0">
 			<div class="row">
 
@@ -41,48 +42,58 @@
 						</div>
 						<div class="card-body">
 
-							<form>
-								
+							<form id="reg-form" action="RegisterServlet" method="post">
+
 								<div class="form-group">
 									<label for="user_name">User Name</label> <input
-										type="text" class="form-control" id="user_name"
-										aria-describedby="emailHelp" placeholder="Enter name">
-									
+										name="user_name" type="text" class="form-control"
+										id="user_name" aria-describedby="emailHelp"
+										placeholder="Enter name">
+
 								</div>
-							
+
 								<div class="form-group">
 									<label for="exampleInputEmail1">Email address</label> <input
-										type="email" class="form-control" id="exampleInputEmail1"
-										aria-describedby="emailHelp" placeholder="Enter email">
-									<small id="emailHelp" class="form-text text-muted">We'll
-										never share your email with anyone else.</small>
+										name="user_email" type="email" class="form-control"
+										id="exampleInputEmail1" aria-describedby="emailHelp"
+										placeholder="Enter email"> <small id="emailHelp"
+										class="form-text text-muted">We'll never share your
+										email with anyone else.</small>
 								</div>
-								
+
 								<div class="form-group">
 									<label for="exampleInputPassword1">Password</label> <input
-										type="password" class="form-control"
+										name="user_password" type="password" class="form-control"
 										id="exampleInputPassword1" placeholder="Password">
 								</div>
-								
+
 								<div class="form-group">
-									<label for="gender">Select Gender</label> 
-									<br>
-									<input type="radio" id="gender" name="gender">Male
-									<input type="radio" id="gender" name="gender">Female
+									<label>Select Gender</label> <br> <input type="radio"
+										name="gender" value="Male">Male <input type="radio"
+										name="gender" value="Female">Female
 								</div>
-								
+
 								<div class="form-grup">
-									<textarea class="form-control"id=""name="about"rows="5" cols="" placeholder="Enter somethings about yourself"></textarea>
+									<textarea class="form-control" id="" name="about" rows="5"
+										cols="" placeholder="Enter somethings about yourself"></textarea>
 								</div>
-								
+
 								<div class="form-check">
-									<input type="checkbox" class="form-check-input"
-										id="exampleCheck1"> <label class="form-check-label"
-										for="exampleCheck1">agree terms and conditions</label>
+									<input name="user_check" type="checkbox"
+										class="form-check-input" id="exampleCheck1"> <label
+										class="form-check-label" for="exampleCheck1">agree
+										terms and conditions</label>
 								</div>
-								
+
 								<br>
-								<button type="submit" class="btn primary-background">Submit</button>
+								<div class="container text-center" id="loader"
+									style="display: none;">
+									<i class="fa fa-refresh fa-spin fa-4x"></i>
+									<h1>Please wait ...</h1>
+								</div>
+								<br>
+								<button id="submit-button" type="submit"
+									class="btn primary-background">Submit</button>
 							</form>
 						</div>
 					</div>
@@ -106,5 +117,56 @@
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<script src="js/myJs.js" type="text/javascript"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+		integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<script>
+		$().ready(function(){
+			console.log("loaded ...");
+			$('#reg-form').on('submit',function(event){
+				event.preventDefault();
+				let form=new FormData(this);
+				$('#submit-button').hide();
+				$('#loader').show();
+				//send to the register servlet
+				$.ajax({
+					url:"RegisterServlet",
+					type:"POST",
+					data:form,
+					success:function(data,textStatus,jqXHR){
+						console.log(data);
+						
+						$('#submit-button').show();
+						$('#loader').hide();
+						if(data.trim()==='done'){
+							swal("Registered Successfully we are going to redirect to login page")
+							.then((value) => {
+							  window.location="login.jsp";
+							});
+						}else{
+							swal(data);
+						}
+						
+						
+						
+					},
+					error:function(jqXHR,textStatus,errorThrown){
+						console.log(jqXHR);
+						
+						$('#submit-button').show();
+						$('#loader').hide();
+						swal("Something went wrong ... try again")
+						
+					},
+					processData:false,
+					contentType:false
+					
+				})
+			})
+		})
+		
+	</script>
 </body>
 </html>

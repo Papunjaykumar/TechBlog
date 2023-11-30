@@ -48,9 +48,9 @@
 					are not meant to be used for programming.[4] One way of classifying
 					computer languages is by the computations they are capable of
 					expressing, as described by the theory of computation.</p>
-				<button class="btn btn-lg btn-outline-light">
+				<a href="register.jsp"class="btn btn-lg btn-outline-light">
 					<i class="fa fa-user-plus"></i> Start ! Its Free
-				</button>
+				</a>
 				<a href="login.jsp"class="btn btn-lg btn-outline-light">
 					<i class="fa fa-user-circle fa-spin"></i> Login
 				</a>
