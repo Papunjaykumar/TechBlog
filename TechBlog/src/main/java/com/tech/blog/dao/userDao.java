@@ -2,6 +2,7 @@ package com.tech.blog.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import com.tech.blog.entities.User;
 
@@ -38,5 +39,37 @@ public class userDao {
 		}
 		return f;
 		
+	}
+//	get user by user email and password
+	public User getUserByEmailAndPassword(String email,String password) {
+		User user=null;
+		try {
+			String query="Select * from userTable where email=? and password=?";
+			PreparedStatement pstmt=this.con.prepareStatement(query);
+			pstmt.setString(1, email);
+			pstmt.setString(2,password);
+			//fetching the data from the database
+			ResultSet rstmt=pstmt.executeQuery();
+			if(rstmt.next()) {
+				user=new User();
+//				data from tb
+				String name=rstmt.getString("name");
+//				set the data to the user
+				user.setName(name);
+				user.setId(rstmt.getInt("userid"));
+				user.setEmail(rstmt.getString("email"));
+				user.setPassword(rstmt.getString("password"));
+				user.setGender(rstmt.getString("gender"));
+				user.setAbout(rstmt.getString("about"));
+				user.setDateTime(rstmt.getTimestamp("rdate"));
+				user.setProfile(rstmt.getString("profile"));
+				
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return user;
 	}
 }
