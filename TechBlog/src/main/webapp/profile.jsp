@@ -1,13 +1,11 @@
 <%@ page import="com.tech.blog.entities.User"%>
 <%@ page errorPage="error.jsp"%>
 <%
+User user = (User) session.getAttribute("user");
 
-	User user=(User)session.getAttribute("user");
-	
-	if(user==null){
-		response.sendRedirect("login.jsp");
-	}
-	
+if (user == null) {
+	response.sendRedirect("login.jsp");
+}
 %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -28,11 +26,11 @@
 <!-- font awesome -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style >
-	 .banner-background{
-	 	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 95%, 69% 100%, 25% 96%, 0 100%, 0 0);
-	 }
-	 
+<style>
+.banner-background {
+	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 95%, 69% 100%, 25% 96%, 0 100%, 0 0
+		);
+}
 </style>
 </head>
 <body>
@@ -70,8 +68,9 @@
 						class="fa fa-address-card-o"></i> Contact</a></li>
 			</ul>
 			<ul class="navbar-nav mr-right">
-				<li class="nav-item"><a class="nav-link " href="register.jsp"><i
-						class="fa fa-user-circle "></i> <%=user.getName() %></a></li>
+				<li class="nav-item"><a class="nav-link " href="#!"
+					data-toggle="modal" data-target="#profile-modal"><i
+						class="fa fa-user-circle "></i> <%=user.getName()%></a></li>
 				<li class="nav-item"><a class="nav-link " href="LogoutServlet"><i
 						class="fa fa-user-plus "></i> Logout</a></li>
 			</ul>
@@ -80,13 +79,81 @@
 
 	<!-- end of navbar  -->
 
-	<%=user.getName() %>
+	<!-- profile modal -->
+
+	<!-- Button trigger modal -->
+
+
+	<!-- Modal -->
+
+	<div class="modal fade" id="profile-modal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header primary-background text-white text-center">
+					<h5 class="modal-title" id="exampleModalLabel">Tech Blog</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container text-center">
+						<img src="pics/<%=user.getProfile()%>" class="img-fluid"
+							style="border-radius: 50%; max-widht: 200px;">
+						<h5 class="modal-title" id="exampleModalLabel"><%=user.getName()%></h5>
+						<!-- details -->
+
+						<table class="table">
+							
+							<tbody>
+								<tr>
+									<th scope="row">ID :</th>
+									<td><%=user.getId() %></td>
+									
+								</tr>
+								<tr>
+									<th scope="row">Email :</th>
+									<td><%=user.getEmail() %></td>
+									
+								</tr>
+								<tr>
+									<th scope="row">Gender :</th>
+									<td><%=user.getGender() %></td>
+									
+								</tr>
+								<tr>
+									<th scope="row">Status :</th>
+									<td><%=user.getAbout() %></td>
+									
+								</tr>
+								<tr>
+									<th scope="row">Registered on :</th>
+									<td><%=user.getDateTime().toString() %></td>
+									
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Edit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- end of profile modal -->
+
+	<%=user.getName()%>
 	<%=user.getEmail()%>
-	<%=user.getGender() %>
-	<%=user.getProfile() %>
-	<%=user.getAbout() %>
-	
-	
+	<%=user.getGender()%>
+	<%=user.getProfile()%>
+	<%=user.getAbout()%>
+
+
 	<!-- Jquery -->
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
 		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
