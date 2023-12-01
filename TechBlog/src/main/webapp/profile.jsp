@@ -139,7 +139,7 @@ if (user == null) {
 						<!-- profile edit -->
 						<div id="profile-edit" style="display:none;">
 							<h3 class="mt-3">Please Edit Carefully</h3>
-							<form action="EditServlet" method="post">
+							<form action="EditServlet" method="post" enctype="multipart/form-data">
 								<table class="table">
 								
 									<tr>
@@ -175,7 +175,9 @@ if (user == null) {
 									<tr>
 										<td>New Profile Pic :</td>
 										<td>
-											<input type="file" name="image"class="form-control">
+											<div class="btn light-blue">
+										<input type="file" name="image">
+									</div>
 										</td>
 									</tr>
 									
