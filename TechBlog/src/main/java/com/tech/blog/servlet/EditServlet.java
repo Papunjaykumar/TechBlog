@@ -1,5 +1,6 @@
 package com.tech.blog.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -13,8 +14,10 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.tech.blog.dao.userDao;
+import com.tech.blog.entities.Message;
 import com.tech.blog.entities.User;
 import com.tech.blog.helper.ConnectionProvider;
+import com.tech.blog.helper.ImageUploadHelper;
 
 /**
  * Servlet implementation class EditServlet
@@ -69,10 +72,31 @@ public class EditServlet extends HttpServlet {
 		userDao dao=new userDao(ConnectionProvider.getConnection());
 		boolean ans=dao.updateUser(user);
 		if(ans) {
-			out.println("Updated to db");
+			
+			String path=request.getRealPath("/")+"pics"+File.separator+user.getProfile();
+			System.out.println(path);
+			
+			
+				boolean upload=ImageUploadHelper.saveFile(part.getInputStream(), path);
+				if(upload) {
+					out.println("Profile Updated ...");
+					Message msg=new Message("Profile Details Updated...", "success", "alert-success");
+					session.setAttribute("msg", msg);
+					
+					out.println("Updated to db");
+				}else {
+					out.println("File Not save...");
+					Message msg=new Message("Something went wrong...", "error", "alert-danger");
+					session.setAttribute("msg", msg);
+				}
+			
 		}else {
 			out.println("Not updated..");
+			Message msg=new Message("Something went wrong...", "error", "alert-danger");
+			session.setAttribute("msg", msg);
 		}
+		
+		response.sendRedirect("profile.jsp");
 		
 		
 		

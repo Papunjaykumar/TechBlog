@@ -1,5 +1,6 @@
 <%@ page import="com.tech.blog.entities.User"%>
 <%@ page errorPage="error.jsp"%>
+<%@ page import="com.tech.blog.entities.*" %>
 <%
 User user = (User) session.getAttribute("user");
 
@@ -79,6 +80,18 @@ if (user == null) {
 
 	<!-- end of navbar  -->
 
+	<%
+	Message msg = (Message) session.getAttribute("msg");
+	if (msg != null) {
+	%>
+	<div class="alert <%=msg.getCssClass()%>" role="alert">
+		<%=msg.getMsg()%>
+	</div>
+	<%
+	session.removeAttribute("msg");
+	}
+	%>
+
 	<!-- profile modal -->
 
 	<!-- Button trigger modal -->
@@ -99,8 +112,8 @@ if (user == null) {
 				</div>
 				<div class="modal-body">
 					<div class="container text-center">
-						<img src="pics/<%=user.getProfile()%>" class="img-fluid"
-							style="border-radius: 50%; max-widht: 200px;">
+						<img src="pics/<%=user.getProfile()%>" class="img-fluid "
+							style="border-radius: 50%; max-width: 150px;">
 						<h5 class="modal-title" id="exampleModalLabel"><%=user.getName()%></h5>
 						<!-- details -->
 
@@ -110,85 +123,90 @@ if (user == null) {
 								<tbody>
 									<tr>
 										<th scope="row">ID :</th>
-										<td><%=user.getId() %></td>
+										<td><%=user.getId()%></td>
 
 									</tr>
 									<tr>
 										<th scope="row">Email :</th>
-										<td><%=user.getEmail() %></td>
+										<td><%=user.getEmail()%></td>
 
 									</tr>
 									<tr>
 										<th scope="row">Gender :</th>
-										<td><%=user.getGender() %></td>
+										<td><%=user.getGender()%></td>
 
 									</tr>
 									<tr>
 										<th scope="row">Status :</th>
-										<td><%=user.getAbout() %></td>
+										<td><%=user.getAbout()%></td>
 
 									</tr>
 									<tr>
 										<th scope="row">Registered on :</th>
-										<td><%=user.getDateTime().toString() %></td>
+										<td><%=user.getDateTime().toString()%></td>
 
 									</tr>
 								</tbody>
 							</table>
 						</div>
 						<!-- profile edit -->
-						<div id="profile-edit" style="display:none;">
+						<div id="profile-edit" style="display: none;">
 							<h3 class="mt-3">Please Edit Carefully</h3>
-							<form action="EditServlet" method="post" enctype="multipart/form-data">
+							<form action="EditServlet" method="post"
+								enctype="multipart/form-data">
 								<table class="table">
-								
+
 									<tr>
 										<td>ID :</td>
-										<td><%=user.getId() %></td>
+										<td><%=user.getId()%></td>
 									</tr>
-									
+
 									<tr>
 										<td>Email :</td>
-										<td><input type="email" class="form-control" name="user_email" value=<%=user.getEmail() %>></td>
+										<td><input type="email" class="form-control"
+											name="user_email" value=<%=user.getEmail()%>></td>
 									</tr>
-									
+
 									<tr>
 										<td>Name :</td>
-										<td><input type="text" class="form-control" name="user_name" value=<%=user.getName() %>></td>
+										<td><input type="text" class="form-control"
+											name="user_name" value=<%=user.getName()%>></td>
 									</tr>
-									
+
 									<tr>
 										<td>Password :</td>
-										<td><input type="password" class="form-control" name="user_password" value=<%=user.getPassword() %>></td>
+										<td><input type="password" class="form-control"
+											name="user_password" value=<%=user.getPassword()%>></td>
 									</tr>
-									
+
 									<tr>
 										<td>Gender :</td>
-										<td><%=user.getGender().toUpperCase() %></td>
+										<td><%=user.getGender().toUpperCase()%></td>
 									</tr>
-									
+
 									<tr>
 										<td>About :</td>
-										<td><textarea class="form-control" name="user_about"rows="3" cols=""><%=user.getAbout() %></textarea></td>
+										<td><textarea class="form-control" name="user_about"
+												rows="3" cols=""><%=user.getAbout()%></textarea></td>
 									</tr>
-									
+
 									<tr>
 										<td>New Profile Pic :</td>
 										<td>
 											<div class="btn light-blue">
-										<input type="file" name="image">
-									</div>
+												<input type="file" name="image">
+											</div>
 										</td>
 									</tr>
-									
-									
-									
+
+
+
 								</table>
-								
+
 								<div class="container">
 									<button type="submit" class="btn btn-outline-primary">Save</button>
 								</div>
-							
+
 							</form>
 						</div>
 
@@ -197,7 +215,8 @@ if (user == null) {
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Close</button>
-					<button id="edit-profile-button"type="button" class="btn primary-background text-white">Edit</button>
+					<button id="edit-profile-button" type="button"
+						class="btn primary-background text-white">Edit</button>
 				</div>
 			</div>
 		</div>
@@ -227,26 +246,25 @@ if (user == null) {
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<script src="js/myJs.js" type="text/javascript"></script>
-	
+
 	<script>
-		$().ready(function(){
-			let editStatus=false;
-			$('#edit-profile-button').click(function(){
-				
-				if(editStatus==false){
-					
+		$().ready(function() {
+			let editStatus = false;
+			$('#edit-profile-button').click(function() {
+
+				if (editStatus == false) {
+
 					$('#profile-detail').hide();
 					$('#profile-edit').show();
-					editStatus=true;
+					editStatus = true;
 					$(this).text("Back");
-				}else{
+				} else {
 					$('#profile-detail').show();
 					$('#profile-edit').hide();
-					editStatus=false;
+					editStatus = false;
 					$(this).text("Edit");
 				}
-				
-				
+
 			})
 		})
 	</script>
