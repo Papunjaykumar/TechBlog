@@ -104,42 +104,98 @@ if (user == null) {
 						<h5 class="modal-title" id="exampleModalLabel"><%=user.getName()%></h5>
 						<!-- details -->
 
-						<table class="table">
+						<div id="profile-detail">
+							<table class="table">
+
+								<tbody>
+									<tr>
+										<th scope="row">ID :</th>
+										<td><%=user.getId() %></td>
+
+									</tr>
+									<tr>
+										<th scope="row">Email :</th>
+										<td><%=user.getEmail() %></td>
+
+									</tr>
+									<tr>
+										<th scope="row">Gender :</th>
+										<td><%=user.getGender() %></td>
+
+									</tr>
+									<tr>
+										<th scope="row">Status :</th>
+										<td><%=user.getAbout() %></td>
+
+									</tr>
+									<tr>
+										<th scope="row">Registered on :</th>
+										<td><%=user.getDateTime().toString() %></td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- profile edit -->
+						<div id="profile-edit" style="display:none;">
+							<h3 class="mt-3">Please Edit Carefully</h3>
+							<form action="EditServlet" method="post">
+								<table class="table">
+								
+									<tr>
+										<td>ID :</td>
+										<td><%=user.getId() %></td>
+									</tr>
+									
+									<tr>
+										<td>Email :</td>
+										<td><input type="email" class="form-control" name="user_email" value=<%=user.getEmail() %>></td>
+									</tr>
+									
+									<tr>
+										<td>Name :</td>
+										<td><input type="text" class="form-control" name="user_name" value=<%=user.getName() %>></td>
+									</tr>
+									
+									<tr>
+										<td>Password :</td>
+										<td><input type="password" class="form-control" name="user_password" value=<%=user.getPassword() %>></td>
+									</tr>
+									
+									<tr>
+										<td>Gender :</td>
+										<td><%=user.getGender().toUpperCase() %></td>
+									</tr>
+									
+									<tr>
+										<td>About :</td>
+										<td><textarea class="form-control" name="user_about"rows="3" cols=""><%=user.getAbout() %></textarea></td>
+									</tr>
+									
+									<tr>
+										<td>New Profile Pic :</td>
+										<td>
+											<input type="file" name="image"class="form-control">
+										</td>
+									</tr>
+									
+									
+									
+								</table>
+								
+								<div class="container">
+									<button type="submit" class="btn btn-outline-primary">Save</button>
+								</div>
 							
-							<tbody>
-								<tr>
-									<th scope="row">ID :</th>
-									<td><%=user.getId() %></td>
-									
-								</tr>
-								<tr>
-									<th scope="row">Email :</th>
-									<td><%=user.getEmail() %></td>
-									
-								</tr>
-								<tr>
-									<th scope="row">Gender :</th>
-									<td><%=user.getGender() %></td>
-									
-								</tr>
-								<tr>
-									<th scope="row">Status :</th>
-									<td><%=user.getAbout() %></td>
-									
-								</tr>
-								<tr>
-									<th scope="row">Registered on :</th>
-									<td><%=user.getDateTime().toString() %></td>
-									
-								</tr>
-							</tbody>
-						</table>
+							</form>
+						</div>
+
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Edit</button>
+					<button id="edit-profile-button"type="button" class="btn primary-background text-white">Edit</button>
 				</div>
 			</div>
 		</div>
@@ -169,6 +225,29 @@ if (user == null) {
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<script src="js/myJs.js" type="text/javascript"></script>
+	
+	<script>
+		$().ready(function(){
+			let editStatus=false;
+			$('#edit-profile-button').click(function(){
+				
+				if(editStatus==false){
+					
+					$('#profile-detail').hide();
+					$('#profile-edit').show();
+					editStatus=true;
+					$(this).text("Back");
+				}else{
+					$('#profile-detail').show();
+					$('#profile-edit').hide();
+					editStatus=false;
+					$(this).text("Edit");
+				}
+				
+				
+			})
+		})
+	</script>
 
 
 </body>
