@@ -70,7 +70,8 @@ if (user == null) {
 					</div></li>
 				<li class="nav-item"><a class="nav-link " href="#"><i
 						class="fa fa-address-card-o"></i> Contact</a></li>
-				<li class="nav-item"><a class="nav-link " href="#" data-toggle="modal" data-target="#add-post-modal"><i
+				<li class="nav-item"><a class="nav-link " href="#"
+					data-toggle="modal" data-target="#add-post-modal"><i
 						class="fa fa-"></i> Do Post</a></li>
 			</ul>
 			<ul class="navbar-nav mr-right">
@@ -236,51 +237,55 @@ if (user == null) {
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header primary-background  text-white">
-					<h5 class="modal-title " id="exampleModalLabel">Provide the post Details</h5>
+					<h5 class="modal-title " id="exampleModalLabel">Provide the
+						post Details</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="add-post-form"action="AddPostServlet" method="post">
+					<form id="add-post-form" action="AddPostServlet" method="post">
 						<div class="form-group">
 							<select class="form-control" name="cid">
-							<option selected disabled>---Select Category---</option>
-							<%
-							
-								PostDao dao=new PostDao(ConnectionProvider.getConnection());
-								List<Category>list=dao.getAllCategories();
-								for(Category c:list){
-									
-							%>
-									<option value="<%=c.getId()%>"><%=c.getName() %></option>
-							<%
+								<option selected disabled>---Select Category---</option>
+								<%
+								PostDao dao = new PostDao(ConnectionProvider.getConnection());
+								List<Category> list = dao.getAllCategories();
+								for (Category c : list) {
+								%>
+								<option value="<%=c.getId()%>"><%=c.getName()%></option>
+								<%
 								}
-							%>
-						</select>
+								%>
+							</select>
 						</div>
 						<div class="form-group">
-							<input name="pTitle" type="text" placeholder="Enter Post Title" class="form-control">
+							<input name="pTitle" type="text" placeholder="Enter Post Title"
+								class="form-control">
 						</div>
 						<div class="form-group">
-							<textarea name="pContent" class="form-control" placeholder="Enter Your Content" style="height:200px;"rows="5" cols=""></textarea>
+							<textarea name="pContent" class="form-control"
+								placeholder="Enter Your Content" style="height: 200px;" rows="5"
+								cols=""></textarea>
 						</div>
-						
+
 						<div class="form-group">
-							<textarea name="pCode" class="form-control" placeholder="Enter Your Code(if any)" style="height:200px;"rows="5" cols=""></textarea>
+							<textarea name="pCode" class="form-control"
+								placeholder="Enter Your Code(if any)" style="height: 200px;"
+								rows="5" cols=""></textarea>
 						</div>
-						
+
 						<div class="form-group">
-						<label>Enter your pics :</label>
-							<input name="pPic" type="file" placeholder="Enter your pics" class="form-control">
+							<label>Enter your pics :</label> <input name="pPic" type="file"
+								placeholder="Enter your pics" class="form-control">
 						</div>
 						<div class="container text-center ">
 							<button type="submit" class="btn btn-outline-primary ">Post</button>
 						</div>
 					</form>
 				</div>
-				
+
 			</div>
 		</div>
 	</div>
@@ -307,6 +312,11 @@ if (user == null) {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
+	<!-- Sweet alert -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+		integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="js/myJs.js" type="text/javascript"></script>
 
 	<script>
@@ -332,36 +342,39 @@ if (user == null) {
 	</script>
 	<!-- now add post js -->
 	<script>
-		
-		$().ready(function(e){
-			
-			$('#add-post-form').on("submit",function(event){
+		$().ready(function(e) {
+
+			$('#add-post-form').on("submit", function(event) {
 				/*  This code call when post form is submitted
 					This is asynchromous behaviour
-				*/
+				 */
 				event.preventDefault();
-				
-				let form=new FormData(this);
-				
+
+				let form = new FormData(this);
+
 				/* now requesting to server */
 				$.ajax({
-					url:"AddPostServlet",
-					type:"POST",
-					data:form,
-					success:function(data,textStatus,jqXHR){
+					url : "AddPostServlet",
+					type : "POST",
+					data : form,
+					success : function(data, textStatus, jqXHR) {
 						/* Success */
-						console.log(data);
+						if(data.trim()==="done"){
+							swal("Good job!", "Saved Successfully", "success");
+						}else{
+							swal("Error!!", "Something went wrong try again...", "error");
+						}
+						
 					},
-					error:function(jqXHR,textStatus,errorThrown){
+					error : function(jqXHR, textStatus, errorThrown) {
 						/* error */
+						swal("Error!!", "Something went wrong try again...", "error");
 					},
-					processData:false,
-					contentType:false
+					processData : false,
+					contentType : false
 				})
 			})
 		})
-		
-		
 	</script>
 
 
