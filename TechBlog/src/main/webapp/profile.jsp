@@ -1,6 +1,9 @@
+<%@page import="java.util.List"%>
+<%@page import="com.tech.blog.helper.ConnectionProvider"%>
+<%@page import="com.tech.blog.dao.PostDao"%>
 <%@ page import="com.tech.blog.entities.User"%>
 <%@ page errorPage="error.jsp"%>
-<%@ page import="com.tech.blog.entities.*" %>
+<%@ page import="com.tech.blog.entities.*"%>
 <%
 User user = (User) session.getAttribute("user");
 
@@ -67,6 +70,8 @@ if (user == null) {
 					</div></li>
 				<li class="nav-item"><a class="nav-link " href="#"><i
 						class="fa fa-address-card-o"></i> Contact</a></li>
+				<li class="nav-item"><a class="nav-link " href="#" data-toggle="modal" data-target="#add-post-modal"><i
+						class="fa fa-"></i> Do Post</a></li>
 			</ul>
 			<ul class="navbar-nav mr-right">
 				<li class="nav-item"><a class="nav-link " href="#!"
@@ -223,6 +228,64 @@ if (user == null) {
 	</div>
 
 	<!-- end of profile modal -->
+	<!-- start post modal -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header primary-background  text-white">
+					<h5 class="modal-title " id="exampleModalLabel">Provide the post Details</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="AddPostServlet" method="post">
+						<div class="form-group">
+							<select class="form-control">
+							<option selected disabled>---Select Category---</option>
+							<%
+							
+								PostDao dao=new PostDao(ConnectionProvider.getConnection());
+								List<Category>list=dao.getAllCategories();
+								for(Category c:list){
+									
+							%>
+									<option><%=c.getName() %></option>
+							<%
+								}
+							%>
+						</select>
+						</div>
+						<div class="form-group">
+							<input type="text" placeholder="Enter Post Title" class="form-control">
+						</div>
+						<div class="form-group">
+							<textarea class="form-control" placeholder="Enter Your Content" style="height:200px;"rows="5" cols=""></textarea>
+						</div>
+						
+						<div class="form-group">
+							<textarea class="form-control" placeholder="Enter Your Code(if any)" style="height:200px;"rows="5" cols=""></textarea>
+						</div>
+						
+						<div class="form-group">
+						<label>Enter your pics :</label>
+							<input type="file" placeholder="Enter your pics" class="form-control">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end of post modal  -->
 
 	<%=user.getName()%>
 	<%=user.getEmail()%>
