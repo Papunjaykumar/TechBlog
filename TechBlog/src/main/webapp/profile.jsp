@@ -243,9 +243,9 @@ if (user == null) {
 					</button>
 				</div>
 				<div class="modal-body">
-					<form action="AddPostServlet" method="post">
+					<form id="add-post-form"action="AddPostServlet" method="post">
 						<div class="form-group">
-							<select class="form-control">
+							<select class="form-control" name="cid">
 							<option selected disabled>---Select Category---</option>
 							<%
 							
@@ -254,34 +254,33 @@ if (user == null) {
 								for(Category c:list){
 									
 							%>
-									<option><%=c.getName() %></option>
+									<option value="<%=c.getId()%>"><%=c.getName() %></option>
 							<%
 								}
 							%>
 						</select>
 						</div>
 						<div class="form-group">
-							<input type="text" placeholder="Enter Post Title" class="form-control">
+							<input name="pTitle" type="text" placeholder="Enter Post Title" class="form-control">
 						</div>
 						<div class="form-group">
-							<textarea class="form-control" placeholder="Enter Your Content" style="height:200px;"rows="5" cols=""></textarea>
+							<textarea name="pContent" class="form-control" placeholder="Enter Your Content" style="height:200px;"rows="5" cols=""></textarea>
 						</div>
 						
 						<div class="form-group">
-							<textarea class="form-control" placeholder="Enter Your Code(if any)" style="height:200px;"rows="5" cols=""></textarea>
+							<textarea name="pCode" class="form-control" placeholder="Enter Your Code(if any)" style="height:200px;"rows="5" cols=""></textarea>
 						</div>
 						
 						<div class="form-group">
 						<label>Enter your pics :</label>
-							<input type="file" placeholder="Enter your pics" class="form-control">
+							<input name="pPic" type="file" placeholder="Enter your pics" class="form-control">
+						</div>
+						<div class="container text-center ">
+							<button type="submit" class="btn btn-outline-primary ">Post</button>
 						</div>
 					</form>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -330,6 +329,39 @@ if (user == null) {
 
 			})
 		})
+	</script>
+	<!-- now add post js -->
+	<script>
+		
+		$().ready(function(e){
+			
+			$('#add-post-form').on("submit",function(event){
+				/*  This code call when post form is submitted
+					This is asynchromous behaviour
+				*/
+				event.preventDefault();
+				
+				let form=new FormData(this);
+				
+				/* now requesting to server */
+				$.ajax({
+					url:"AddPostServlet",
+					type:"POST",
+					data:form,
+					success:function(data,textStatus,jqXHR){
+						/* Success */
+						console.log(data);
+					},
+					error:function(jqXHR,textStatus,errorThrown){
+						/* error */
+					},
+					processData:false,
+					contentType:false
+				})
+			})
+		})
+		
+		
 	</script>
 
 
