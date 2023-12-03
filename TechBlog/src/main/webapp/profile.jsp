@@ -97,6 +97,49 @@ if (user == null) {
 	session.removeAttribute("msg");
 	}
 	%>
+	<!-- main body of the page -->
+	<main>
+		<div class="container">
+
+			<div class="row mt-4">
+				<!-- first col -->
+				<div class="col-md-4">
+					<!--Categories  -->
+					<div class="list-group">
+						<a href="#" class="list-group-item list-group-item-action active">All Posts </a>
+						<%
+							PostDao dao=new PostDao(ConnectionProvider.getConnection());
+							List<Category>list=dao.getAllCategories();
+							for(Category c:list){
+						%>
+						<a href="#"class="list-group-item list-group-item-action"><%=c.getName() %></a> 
+						<%
+							}
+						%> 
+						
+							
+					</div>
+
+				</div>
+				<!-- Second col -->
+				<div class="col-md-8">
+					<!-- posts -->
+					<div id="loader" class="container text-center">
+					<i class="fa fa-refresh fa-4x fa-spin"></i>
+					<h3 class="mt-2">Loading...</h3>
+					</div>
+					
+					<div class="container-fluid" id="post-container">
+					
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</main>
+
+	<!-- end of main body -->
 
 	<!-- profile modal -->
 
@@ -250,8 +293,8 @@ if (user == null) {
 							<select class="form-control" name="cid">
 								<option selected disabled>---Select Category---</option>
 								<%
-								PostDao dao = new PostDao(ConnectionProvider.getConnection());
-								List<Category> list = dao.getAllCategories();
+								/* PostDao dao = new PostDao(ConnectionProvider.getConnection()); */
+								/* List<Category> list = dao.getAllCategories(); */
 								for (Category c : list) {
 								%>
 								<option value="<%=c.getId()%>"><%=c.getName()%></option>
@@ -291,11 +334,7 @@ if (user == null) {
 	</div>
 	<!--end of post modal  -->
 
-	<%=user.getName()%>
-	<%=user.getEmail()%>
-	<%=user.getGender()%>
-	<%=user.getProfile()%>
-	<%=user.getAbout()%>
+
 
 
 	<!-- Jquery -->
@@ -342,37 +381,73 @@ if (user == null) {
 	</script>
 	<!-- now add post js -->
 	<script>
-		$().ready(function(e) {
+		$()
+				.ready(
+						function(e) {
 
-			$('#add-post-form').on("submit", function(event) {
-				/*  This code call when post form is submitted
-					This is asynchromous behaviour
-				 */
-				event.preventDefault();
+							$('#add-post-form')
+									.on(
+											"submit",
+											function(event) {
+												/*  This code call when post form is submitted
+													This is asynchromous behaviour
+												 */
+												event.preventDefault();
 
-				let form = new FormData(this);
+												let form = new FormData(this);
 
-				/* now requesting to server */
-				$.ajax({
-					url : "AddPostServlet",
-					type : "POST",
-					data : form,
-					success : function(data, textStatus, jqXHR) {
-						/* Success */
-						if(data.trim()==="done"){
-							swal("Good job!", "Saved Successfully", "success");
-						}else{
-							swal("Error!!", "Something went wrong try again...", "error");
-						}
-						
-					},
-					error : function(jqXHR, textStatus, errorThrown) {
-						/* error */
-						swal("Error!!", "Something went wrong try again...", "error");
-					},
-					processData : false,
-					contentType : false
-				})
+												/* now requesting to server */
+												$
+														.ajax({
+															url : "AddPostServlet",
+															type : "POST",
+															data : form,
+															success : function(
+																	data,
+																	textStatus,
+																	jqXHR) {
+																/* Success */
+																if (data.trim() === "done") {
+																	swal(
+																			"Good job!",
+																			"Saved Successfully",
+																			"success");
+																} else {
+																	swal(
+																			"Error!!",
+																			"Something went wrong try again...",
+																			"error");
+																}
+
+															},
+															error : function(
+																	jqXHR,
+																	textStatus,
+																	errorThrown) {
+																/* error */
+																swal(
+																		"Error!!",
+																		"Something went wrong try again...",
+																		"error");
+															},
+															processData : false,
+															contentType : false
+														})
+											})
+						})
+	</script>
+	<!--load post using ajax  -->
+	<script>
+		$().ready(function(){
+			$.ajax({
+				url:"load_post.jsp",
+				method:"post",
+				success:function(data,textStatus,jqXHR){
+					console.log(data);
+					$('#loader').hide();
+					$('#post-container').html(data)
+					
+				}
 			})
 		})
 	</script>
