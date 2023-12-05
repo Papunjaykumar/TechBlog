@@ -86,6 +86,9 @@ body {
 	background-attachment: fixed;
 }
 </style>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v18.0" nonce="omtRUKyN"></script>
 </head>
 <body>
 	<!--navbar  -->
@@ -178,6 +181,12 @@ body {
 							class="fa fa-thumbs-o-up"><span class="like-counter"><%=lDao.countLikeOnPost(post.getpId()) %></span></i></a><a href="#"
 							class="btn btn-outline-light btn-sm"><i
 							class="fa fa-commenting-o"><span>20</span></i></a>
+							
+					</div>
+					<div class="card-footer">
+						
+						<div class="fb-comments" data-href="http://localhost:8088/TechBlog/show_blog.jsp?post_id=<%=post.getpId() %>" data-width="" data-numposts="5"></div>
+						
 					</div>
 				</div>
 			</div>
