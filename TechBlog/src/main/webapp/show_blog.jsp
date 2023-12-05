@@ -1,3 +1,4 @@
+<%@page import="com.tech.blog.dao.LikeDao"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="com.tech.blog.dao.userDao"%>
 <%@page import="java.util.List"%>
@@ -16,10 +17,9 @@ if (user == null) {
 %>
 
 <%
-	int postId=Integer.parseInt(request.getParameter("post_id"));
-	PostDao dao=new PostDao(ConnectionProvider.getConnection());
-	Post post=dao.getPostById(postId);
-	
+int postId = Integer.parseInt(request.getParameter("post_id"));
+PostDao dao = new PostDao(ConnectionProvider.getConnection());
+Post post = dao.getPostById(postId);
 %>
 
 
@@ -29,7 +29,7 @@ if (user == null) {
 <html>
 <head>
 <meta charset="UTF-8">
-<title><%=post.getpTitle() %> || TechBlog by Learn Code with
+<title><%=post.getpTitle()%> || TechBlog by Learn Code with
 	Papunjay</title>
 <!--boottrap css  -->
 <link rel="stylesheet"
@@ -42,43 +42,49 @@ if (user == null) {
 <!-- font awesome -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link href = "https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto+Slab|Roboto:300,400,500,700" rel = "stylesheet" />
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto+Slab|Roboto:300,400,500,700"
+	rel="stylesheet" />
 <style>
 .banner-background {
 	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 95%, 69% 100%, 25% 96%, 0 100%, 0 0
 		);
 }
-.post-title{
-	font-weight:100;
-	font-size:30px;
+
+.post-title {
+	font-weight: 100;
+	font-size: 30px;
+}
+
+.post-content {
+	font-weight: 100;
+	font-size: 25px;
+}
+
+.post-code {
 	
 }
-.post-content{
-	font-weight:100;
-	font-size:25px;
-}
-.post-code{
 
+.post-date {
+	font-style: italic;
+	font-weight: bold;
 }
-.post-date{
-	font-style:italic;
-	font-weight:bold;
+
+.post-user-info {
+	font-size: 20px;
+	font-weight: 200;
 }
-.post-user-info{
-	font-size:20px;
-	font-weight:200;
+
+.row-user {
+	border: 1px solid #e2e2e2;
+	padding-top: 15px;
 }
-.row-user{
-	border:1px solid #e2e2e2;
-	padding-top:15px;
-}
-body{
+
+body {
 	background: url(img/web_background.jpg);
 	background-size: cover;
 	background-attachment: fixed;
 }
-
-
 </style>
 </head>
 <body>
@@ -97,9 +103,9 @@ body{
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="profile.jsp"><i
-						class="fa fa-bell-o"></i> Learn code with Papunjay<span
-						class="sr-only">(current)</span></a></li>
+				<li class="nav-item active"><a class="nav-link"
+					href="profile.jsp"><i class="fa fa-bell-o"></i> Learn code with
+						Papunjay<span class="sr-only">(current)</span></a></li>
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -136,32 +142,41 @@ body{
 			<div class="col-md-8 offset-md-2">
 				<div class="card">
 					<div class="card-header primary-background text-white">
-						<h4 class="post-title "><%=post.getpTitle() %></h4>
+						<h4 class="post-title "><%=post.getpTitle()%></h4>
 					</div>
 					<div class="card-body">
-						<img class="card-img-top my-2" src="blog_pics/<%=post.getPpic() %>" alt="Card Img Cap">
+						<img class="card-img-top my-2"
+							src="blog_pics/<%=post.getPpic()%>" alt="Card Img Cap">
 						<div class="row my-3 row-user">
 							<div class="col-md-8">
 								<%
-								userDao uDao=new userDao(ConnectionProvider.getConnection());
-								User u=uDao.getUserById(post.getUserId());
+								userDao uDao = new userDao(ConnectionProvider.getConnection());
+								User u = uDao.getUserById(post.getUserId());
 								%>
-								<p class="post-user-info"><a href="#!" data-toggle="modal" data-target="#profile-modal"><%=u.getName() %></a> has Posted</p>
+								<p class="post-user-info">
+									<a href="#!" data-toggle="modal" data-target="#profile-modal"><%=u.getName()%></a>
+									has Posted
+								</p>
 							</div>
 							<div class="col-md-4">
-								<p class="post-date"><%=DateFormat.getDateTimeInstance().format(post.getpDate()) %></p>
+								<p class="post-date"><%=DateFormat.getDateTimeInstance().format(post.getpDate())%></p>
 							</div>
 						</div>
-						<p class="post-content display-3"><%=post.getpContent() %>
-							
+						<p class="post-content display-3"><%=post.getpContent()%>
 						<div class="post-code">
-							<pre><%=post.getpCode() %></pre>
+							<pre><%=post.getpCode()%></pre>
 						</div>
 					</div>
 					<div class="card-footer  primary-background">
-						<a href="#" class="btn btn-outline-light btn-sm"><i
-							class="fa fa-thumbs-o-up"><span>10</span></i></a><a
-							href="#" class="btn btn-outline-light btn-sm"><i
+					<%
+						LikeDao lDao=new LikeDao(ConnectionProvider.getConnection());
+						
+					%>
+						<a href="#"
+							onclick="doLike(<%=post.getpId()%>,<%=user.getId()%>)"
+							class="btn btn-outline-light btn-sm"><i
+							class="fa fa-thumbs-o-up"><span class="like-counter"><%=lDao.countLikeOnPost(post.getpId()) %></span></i></a><a href="#"
+							class="btn btn-outline-light btn-sm"><i
 							class="fa fa-commenting-o"><span>20</span></i></a>
 					</div>
 				</div>
@@ -323,7 +338,7 @@ body{
 								<option selected disabled>---Select Category---</option>
 								<%
 								/* PostDao dao = new PostDao(ConnectionProvider.getConnection()); */
-								 List<Category> list = dao.getAllCategories(); 
+								List<Category> list = dao.getAllCategories();
 								for (Category c : list) {
 								%>
 								<option value="<%=c.getId()%>"><%=c.getName()%></option>
@@ -386,6 +401,7 @@ body{
 		integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="js/myJs.js" type="text/javascript"></script>
+
 
 	<script>
 		$().ready(function() {
@@ -464,6 +480,35 @@ body{
 														})
 											})
 						})
+	</script>
+	<!-- Like post operation  -->
+	<script>
+		function doLike(pid,uid){
+			const d={
+					uid:uid,
+					pid:pid,
+					operation:'like'
+			}
+			$.ajax({
+				url:"LikeServlet",
+				data:d,
+				success:function(data,textStatus,jqXHR){
+					console.log(data)
+					if(data.trim()=="true"){
+						let c=$('.like-counter').html();
+						c++;
+						$('.like-counter').html(c);
+					}
+				},
+				error:function(jqXHR,textStatus,errorThrown){
+					console.log(data)
+				}
+			})
+			
+		}
+		$().ready(function(){
+			
+		})
 	</script>
 
 
