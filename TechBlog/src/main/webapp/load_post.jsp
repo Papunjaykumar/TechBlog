@@ -26,7 +26,7 @@
 			<div class="card-body">
 				<b><%=p.getpTitle() %></b>
 				<p><%=p.getpContent() %>
-				<p><%=p.getpId() %>
+				
 				
 			</div>
 			<div class="card-footer text-center primary-background">

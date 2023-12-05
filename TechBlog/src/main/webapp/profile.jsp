@@ -35,6 +35,11 @@ if (user == null) {
 	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 95%, 69% 100%, 25% 96%, 0 100%, 0 0
 		);
 }
+body{
+	background: url(img/web_background.jpg);
+	background-size: cover;
+	background-attachment: fixed;
+}
 </style>
 </head>
 <body>

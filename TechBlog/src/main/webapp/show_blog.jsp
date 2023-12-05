@@ -1,3 +1,5 @@
+<%@page import="java.text.DateFormat"%>
+<%@page import="com.tech.blog.dao.userDao"%>
 <%@page import="java.util.List"%>
 <%@page import="com.tech.blog.entities.Category"%>
 <%@page import="com.tech.blog.helper.ConnectionProvider"%>
@@ -17,6 +19,7 @@ if (user == null) {
 	int postId=Integer.parseInt(request.getParameter("post_id"));
 	PostDao dao=new PostDao(ConnectionProvider.getConnection());
 	Post post=dao.getPostById(postId);
+	
 %>
 
 
@@ -39,11 +42,43 @@ if (user == null) {
 <!-- font awesome -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href = "https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto+Slab|Roboto:300,400,500,700" rel = "stylesheet" />
 <style>
 .banner-background {
 	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 95%, 69% 100%, 25% 96%, 0 100%, 0 0
 		);
 }
+.post-title{
+	font-weight:100;
+	font-size:30px;
+	
+}
+.post-content{
+	font-weight:100;
+	font-size:25px;
+}
+.post-code{
+
+}
+.post-date{
+	font-style:italic;
+	font-weight:bold;
+}
+.post-user-info{
+	font-size:20px;
+	font-weight:200;
+}
+.row-user{
+	border:1px solid #e2e2e2;
+	padding-top:15px;
+}
+body{
+	background: url(img/web_background.jpg);
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+
 </style>
 </head>
 <body>
@@ -101,13 +136,27 @@ if (user == null) {
 			<div class="col-md-8 offset-md-2">
 				<div class="card">
 					<div class="card-header primary-background text-white">
-						<h4><%=post.getpTitle() %></h4>
+						<h4 class="post-title "><%=post.getpTitle() %></h4>
 					</div>
 					<div class="card-body">
 						<img class="card-img-top my-2" src="blog_pics/<%=post.getPpic() %>" alt="Card Img Cap">
-						<p><%=post.getpContent() %>
-							<br> <br>
-						<pre><%=post.getpCode() %></pre>
+						<div class="row my-3 row-user">
+							<div class="col-md-8">
+								<%
+								userDao uDao=new userDao(ConnectionProvider.getConnection());
+								User u=uDao.getUserById(post.getUserId());
+								%>
+								<p class="post-user-info"><a href="#!" data-toggle="modal" data-target="#profile-modal"><%=u.getName() %></a> has Posted</p>
+							</div>
+							<div class="col-md-4">
+								<p class="post-date"><%=DateFormat.getDateTimeInstance().format(post.getpDate()) %></p>
+							</div>
+						</div>
+						<p class="post-content display-3"><%=post.getpContent() %>
+							
+						<div class="post-code">
+							<pre><%=post.getpCode() %></pre>
+						</div>
 					</div>
 					<div class="card-footer  primary-background">
 						<a href="#" class="btn btn-outline-light btn-sm"><i
