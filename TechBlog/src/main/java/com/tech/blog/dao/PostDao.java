@@ -92,7 +92,7 @@ public class PostDao {
 				int pcid=rs.getInt("pcid");
 				int uId=rs.getInt("userId");
 				
-				Post post=new Post(pTitle, pContent, pCode, pPic, pdate, uId, pcid);
+				Post post=new Post(pid,pTitle, pContent, pCode, pPic, pdate, uId, pcid);
 				list.add(post);
 			}
 		}catch(Exception e){
@@ -103,6 +103,7 @@ public class PostDao {
 		return list;
 		
 	}
+//	get post by category id
 	public List<Post>getPostByCatId(int cid){
 		List<Post>list=new ArrayList<>();
 //		fetch all the post by cid
@@ -119,7 +120,7 @@ public class PostDao {
 				Timestamp pdate=rs.getTimestamp("pdate");
 				int uId=rs.getInt("userId");
 				
-				Post post=new Post(pTitle, pContent, pCode, pPic, pdate, uId, cid);
+				Post post=new Post(pid,pTitle, pContent, pCode, pPic, pdate, uId, cid);
 				list.add(post);
 			}
 		}catch(Exception e) {
@@ -128,6 +129,31 @@ public class PostDao {
 		
 		
 		return list;
+	}
+//	get post by post id
+	public Post getPostById(int pid) {
+		Post post=null;
+		try {
+			PreparedStatement pstmt=con.prepareStatement("select * from posts where pid=?");
+			pstmt.setInt(1, pid);
+			ResultSet rs=pstmt.executeQuery();
+			if(rs.next()) {
+//				int pid=rs.getInt("pid");
+				String pTitle=rs.getString("ptitle");
+				String pContent=rs.getString("pcontent");
+				String pCode=rs.getString("pcode");
+				String pPic=rs.getString("pPic");
+				Timestamp pdate=rs.getTimestamp("pdate");
+				int pcid=rs.getInt("pcid");
+				int uId=rs.getInt("userId");
+				
+				post=new Post(pid,pTitle, pContent, pCode, pPic, pdate, uId, pcid);
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return post;
 	}
 	
 }

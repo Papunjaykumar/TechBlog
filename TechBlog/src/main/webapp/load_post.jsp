@@ -4,9 +4,19 @@
 <%@page import="com.tech.blog.dao.PostDao"%>
 <div class="row">
 <%
-	
+	Thread.sleep(1000);
 	PostDao dao=new PostDao(ConnectionProvider.getConnection());
-	List<Post> posts=dao.getAllPosts();
+	int cid=Integer.parseInt(request.getParameter("cid"));
+	List<Post> posts=null;
+	if(cid==0){
+		posts=dao.getAllPosts();
+	}else{
+		posts=dao.getPostByCatId(cid);
+	}
+	if(posts.size()==0){
+		out.println("<h3 class='display-3 text-center'>No posts in this Category...</h3>");
+		return;
+	}
 	for(Post p:posts){
 %>
 	<div class="col-md-6 mt-2">
@@ -16,8 +26,13 @@
 			<div class="card-body">
 				<b><%=p.getpTitle() %></b>
 				<p><%=p.getpContent() %>
-				<pre><%=p.getpCode() %></pre>
+				<p><%=p.getpId() %>
 				
+			</div>
+			<div class="card-footer text-center primary-background">
+				<a href="#" class="btn btn-outline-light btn-sm" ><i class="fa fa-thumbs-o-up"><span>10</span></i></a>
+				<a href="show_blog.jsp?post_id=<%=p.getpId() %>" class="btn btn-outline-light btn-sm" >Read More...</a>				
+				<a href="#" class="btn btn-outline-light btn-sm" ><i class="fa fa-commenting-o"><span>20</span></i></a>
 			</div>
 		</div>
 		

@@ -1,9 +1,10 @@
 <%@page import="java.util.List"%>
+<%@page import="com.tech.blog.entities.Category"%>
 <%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="com.tech.blog.dao.PostDao"%>
-<%@ page import="com.tech.blog.entities.User"%>
-<%@ page errorPage="error.jsp"%>
-<%@ page import="com.tech.blog.entities.*"%>
+<%@page import="com.tech.blog.entities.Post"%>
+<%@page import="com.tech.blog.entities.User"%>
+<%@page errorPage="error.jsp"%>
 <%
 User user = (User) session.getAttribute("user");
 
@@ -12,13 +13,21 @@ if (user == null) {
 }
 %>
 
+<%
+	int postId=Integer.parseInt(request.getParameter("post_id"));
+	PostDao dao=new PostDao(ConnectionProvider.getConnection());
+	Post post=dao.getPostById(postId);
+%>
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title><%=post.getpTitle() %> || TechBlog by Learn Code with
+	Papunjay</title>
 <!--boottrap css  -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -53,7 +62,7 @@ if (user == null) {
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="#"><i
+				<li class="nav-item active"><a class="nav-link" href="profile.jsp"><i
 						class="fa fa-bell-o"></i> Learn code with Papunjay<span
 						class="sr-only">(current)</span></a></li>
 				<li class="nav-item dropdown"><a
@@ -85,63 +94,33 @@ if (user == null) {
 	</nav>
 
 	<!-- end of navbar  -->
-	
+	<!-- main content of body -->
 
-	<%
-	Message msg = (Message) session.getAttribute("msg");
-	if (msg != null) {
-	%>
-	<div class="alert <%=msg.getCssClass()%>" role="alert">
-		<%=msg.getMsg()%>
-	</div>
-	<%
-	session.removeAttribute("msg");
-	}
-	%>
-	<!-- main body of the page -->
-	<main>
-		<div class="container">
-
-			<div class="row mt-4">
-				<!-- first col -->
-				<div class="col-md-4">
-					<!--Categories  -->
-					<div class="list-group">
-						<a href="#"onClick="getPosts(<%=0%>,this)" class="c-link list-group-item list-group-item-action active">All Posts </a>
-						<%
-							PostDao dao=new PostDao(ConnectionProvider.getConnection());
-							List<Category>list=dao.getAllCategories();
-							for(Category c:list){
-						%>
-						<a href="#" onClick="getPosts(<%=c.getId()%>,this)"class="c-link list-group-item list-group-item-action"><%=c.getName() %></a> 
-						<%
-							}
-						%> 
-						
-							
+	<div class="container">
+		<div class="row my-4">
+			<div class="col-md-8 offset-md-2">
+				<div class="card">
+					<div class="card-header primary-background text-white">
+						<h4><%=post.getpTitle() %></h4>
 					</div>
-
-				</div>
-				<!-- Second col -->
-				<div class="col-md-8">
-					<!-- posts -->
-					<div id="loader" class="container text-center">
-					<i class="fa fa-refresh fa-4x fa-spin"></i>
-					<h3 class="mt-2">Loading...</h3>
+					<div class="card-body">
+						<img class="card-img-top my-2" src="blog_pics/<%=post.getPpic() %>" alt="Card Img Cap">
+						<p><%=post.getpContent() %>
+							<br> <br>
+						<pre><%=post.getpCode() %></pre>
 					</div>
-					
-					<div class="container-fluid" id="post-container">
-					
+					<div class="card-footer  primary-background">
+						<a href="#" class="btn btn-outline-light btn-sm"><i
+							class="fa fa-thumbs-o-up"><span>10</span></i></a><a
+							href="#" class="btn btn-outline-light btn-sm"><i
+							class="fa fa-commenting-o"><span>20</span></i></a>
 					</div>
-
 				</div>
 			</div>
-
 		</div>
-	</main>
+	</div>
 
-	<!-- end of main body -->
-
+	<!-- end of main content of the body -->
 	<!-- profile modal -->
 
 	<!-- Button trigger modal -->
@@ -295,7 +274,7 @@ if (user == null) {
 								<option selected disabled>---Select Category---</option>
 								<%
 								/* PostDao dao = new PostDao(ConnectionProvider.getConnection()); */
-								/* List<Category> list = dao.getAllCategories(); */
+								 List<Category> list = dao.getAllCategories(); 
 								for (Category c : list) {
 								%>
 								<option value="<%=c.getId()%>"><%=c.getName()%></option>
@@ -436,32 +415,6 @@ if (user == null) {
 														})
 											})
 						})
-	</script>
-	<!--load post using ajax  -->
-	<script>
-	
-		function getPosts(catId,temp){
-			$('#loader').show();
-			$('#post-container').hide();
-			$('.c-link').removeClass('active')
-			$.ajax({
-				url:"load_post.jsp",
-				data:{cid:catId},
-				method:"post",
-				success:function(data,textStatus,jqXHR){
-					console.log(data);
-					$('#loader').hide();
-					$('#post-container').show();
-					$('#post-container').html(data)
-					$(temp).addClass('active')
-					
-				}
-			})
-		}
-		$().ready(function(){
-			let allPostRef=$('.c-link')[0]
-			getPosts(0,allPostRef);
-		})
 	</script>
 
 
